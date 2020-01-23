@@ -41,8 +41,12 @@ export class ProjectNodeProvider implements vscode.TreeDataProvider<ProjectNode>
 
 	showProjects(groupModel: GroupModel) {
 		this._groupModel = groupModel;
-		vscode.window.showInformationMessage('Show group');
+		vscode.window.showInformationMessage('Show projects of a group');
 		this.refresh();
+	}
+
+	buildProject() {
+		vscode.window.showInformationMessage('Build project');
 	}
 }
 
@@ -68,6 +72,6 @@ export class ProjectNode extends vscode.TreeItem {
 		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
 	};
 
-	contextValue = 'dependency';
+	contextValue = 'project';
 
 }

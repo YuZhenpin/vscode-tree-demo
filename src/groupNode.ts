@@ -58,6 +58,6 @@ export class GroupNode extends vscode.TreeItem {
 		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
 	};
 
-	contextValue = 'dependency';
+	contextValue = 'group';
 
 }

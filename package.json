@@ -90,6 +90,38 @@
 				}
 			},
 			{
+				"command": "nodeProjects.buildEntry",
+				"title": "Build",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "nodeRecords.refreshEntry",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "nodeRecords.stopEntry",
+				"title": "Stop",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "nodeRecords.showEntry",
+				"title": "Show",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
 				"command": "nodeDependencies.refreshEntry",
 				"title": "Refresh",
 				"icon": {
@@ -178,6 +210,21 @@
 			],
 			"view/title": [
 				{
+					"command": "nodeGroups.refreshEntry",
+					"when": "view == nodeGroups",
+					"group": "navigation"
+				},
+				{
+					"command": "nodeProjects.refreshEntry",
+					"when": "view == nodeProjects",
+					"group": "navigation"
+				},
+				{
+					"command": "nodeRecords.refreshEntry",
+					"when": "view == nodeRecords",
+					"group": "navigation"
+				},
+				{
 					"command": "nodeDependencies.refreshEntry",
 					"when": "view == nodeDependencies",
 					"group": "navigation"
@@ -198,6 +245,16 @@
 				}
 			],
 			"view/item/context": [
+				{
+					"command": "nodeProjects.buildEntry",
+					"when": "view == nodeProjects && viewItem == project",
+					"group": "inline"
+				},
+				{
+					"command": "nodeRecords.stopEntry",
+					"when": "view == nodeRecords && viewItem == record",
+					"group": "inline"
+				},
 				{
 					"command": "nodeDependencies.editEntry",
 					"when": "view == nodeDependencies && viewItem == dependency",

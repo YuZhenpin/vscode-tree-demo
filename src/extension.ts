@@ -24,10 +24,13 @@ export function activate(context: vscode.ExtensionContext) {
 	const projectNodeProvider = new ProjectNodeProvider(vscode.workspace.rootPath, restClient);
 	vscode.window.registerTreeDataProvider('nodeProjects', projectNodeProvider);
 	vscode.commands.registerCommand('nodeProjects.refreshEntry', () => projectNodeProvider.refresh());
+	vscode.commands.registerCommand('nodeProjects.buildEntry', () => projectNodeProvider.buildProject());
 
 	const recordNodeProvider = new RecordNodeProvider(vscode.workspace.rootPath, restClient);
 	vscode.window.registerTreeDataProvider('nodeRecords', recordNodeProvider);
 	vscode.commands.registerCommand('nodeRecords.refreshEntry', () => recordNodeProvider.refresh());
+	vscode.commands.registerCommand('nodeRecords.stopEntry', () => recordNodeProvider.stopRecord());
+	vscode.commands.registerCommand('nodeRecords.showEntry', (recordModel) => recordNodeProvider.showRecord(recordModel));
 
 	const nodeDependenciesProvider = new DepNodeProvider(vscode.workspace.rootPath);
 	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);

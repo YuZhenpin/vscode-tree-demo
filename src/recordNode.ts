@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { RestClient } from './restClient';
 import { ProjectModel } from './models/projectModel';
+import { RecordModel } from './models/recordModel';
 
 export class RecordNodeProvider implements vscode.TreeDataProvider<RecordNode> {
 
@@ -29,35 +30,45 @@ export class RecordNodeProvider implements vscode.TreeDataProvider<RecordNode> {
 		}
 
 		return this.restClient.getRecords(this._projectModel).then(records => {
-			return records.map(g => { return new RecordNode(g.id, g.name, vscode.TreeItemCollapsibleState.None); });
+			return records.map(r => { 
+				const treeItem = new RecordNode(r, vscode.TreeItemCollapsibleState.None);
+				treeItem.command = { command: 'nodeRecords.showEntry', title: "Show Detail", arguments: [r], };
+				return treeItem;
+			});
 		});
 
 	}
 
 	showRecords(projectModel: ProjectModel) {
 		this._projectModel = projectModel;
-		vscode.window.showInformationMessage('Show Projects');
+		vscode.window.showInformationMessage('Show builds of a project');
 		this.refresh();
+	}
+
+	stopRecord() {
+		vscode.window.showInformationMessage('Stop a build');
+	}
+
+	showRecord(recordModel: RecordModel) {
+		vscode.window.showInformationMessage('Show record detail');
 	}
 }
 
 export class RecordNode extends vscode.TreeItem {
 
 	constructor(
-		public readonly label: string,
-		private version: string,
+		public recordModel: RecordModel,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-		public readonly command?: vscode.Command
 	) {
-		super(label, collapsibleState);
+		super(recordModel.name, collapsibleState);
 	}
 
 	get tooltip(): string {
-		return `${this.label}-${this.version}`;
+		return `${this.label}-${this.recordModel.name}`;
 	}
 
 	get description(): string {
-		return this.version;
+		return this.recordModel.name;
 	}
 
 	iconPath = {
@@ -65,6 +76,6 @@ export class RecordNode extends vscode.TreeItem {
 		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
 	};
 
-	contextValue = 'dependency';
+	contextValue = 'record';
 
 }
