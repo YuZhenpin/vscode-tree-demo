@@ -45,8 +45,8 @@ export class RecordNodeProvider implements vscode.TreeDataProvider<RecordNode> {
 		this.refresh();
 	}
 
-	stopRecord() {
-		vscode.window.showInformationMessage('Stop a build');
+	stopRecord(recordNode: RecordNode) {
+		vscode.window.showInformationMessage('Stop a build ' + recordNode.label);
 	}
 
 	showRecord(recordModel: RecordModel) {

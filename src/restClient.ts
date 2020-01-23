@@ -1,6 +1,7 @@
 import { GroupModel } from "./models/groupModel";
 import { ProjectModel } from "./models/projectModel";
 import { RecordModel } from "./models/recordModel";
+import { BranchModel } from "./models/branchModel";
 
 export class RestClient {
 	public getGroups(): Thenable<GroupModel[]>  {
@@ -16,6 +17,12 @@ export class RestClient {
 			} else {
 				resolve([]);
 			}
+		});
+	}
+
+	public getBranches(projectModel: ProjectModel | undefined): Thenable<BranchModel[]> {
+		return new Promise((resolve, rejects) => {
+			resolve([new BranchModel("master"), new BranchModel("dev")]);
 		});
 	}
 

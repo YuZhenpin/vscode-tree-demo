@@ -45,8 +45,10 @@ export class ProjectNodeProvider implements vscode.TreeDataProvider<ProjectNode>
 		this.refresh();
 	}
 
-	buildProject() {
-		vscode.window.showInformationMessage('Build project');
+	buildProject(projectNode: ProjectNode) {
+		vscode.window.showInformationMessage('Build project ' + projectNode.projectModel.name);
+
+		//this.restClient.getBranches()
 	}
 }
 
