@@ -4,13 +4,13 @@ import { RecordModel } from "./models/recordModel";
 import { BranchModel } from "./models/branchModel";
 
 export class RestClient {
-	public getGroups(): Thenable<GroupModel[]>  {
+	public async getGroups(): Promise<GroupModel[]>  {
 		return new Promise((resolve, reject) => {
 			resolve([new GroupModel("1", "hello"), new GroupModel("2", "world")]);
 		});
 	}
 
-	public getProjects(groupModel: GroupModel | undefined): Thenable<ProjectModel[]> {
+	public async getProjects(groupModel: GroupModel | undefined): Promise<ProjectModel[]> {
 		return new Promise((resolve, rejects) => {
 			if (groupModel) {
 				resolve([new ProjectModel("1", "tppppp"), new ProjectModel("2", "foooo")]);
@@ -20,13 +20,13 @@ export class RestClient {
 		});
 	}
 
-	public getBranches(projectModel: ProjectModel | undefined): Thenable<BranchModel[]> {
+	public async getBranches(projectModel: ProjectModel | undefined): Promise<BranchModel[]> {
 		return new Promise((resolve, rejects) => {
 			resolve([new BranchModel("master"), new BranchModel("dev")]);
 		});
 	}
 
-	public getRecords(projectModel: ProjectModel | undefined): Thenable<RecordModel[]> {
+	public async getRecords(projectModel: ProjectModel | undefined): Promise<RecordModel[]> {
 		return new Promise((resolve, reject) => {
 			if (projectModel) {
 				resolve([new RecordModel("3", "4"), new RecordModel("4", "5555")]);

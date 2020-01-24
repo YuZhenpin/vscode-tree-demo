@@ -4,6 +4,7 @@ import * as path from 'path';
 import { RestClient } from './restClient';
 import { GroupModel } from './models/groupModel';
 import { ProjectModel } from './models/projectModel';
+import { BranchModel } from './models/branchModel';
 
 export class ProjectNodeProvider implements vscode.TreeDataProvider<ProjectNode> {
 
@@ -23,20 +24,18 @@ export class ProjectNodeProvider implements vscode.TreeDataProvider<ProjectNode>
 		return element;
 	}
 
-	getChildren(element?: ProjectNode): Thenable<ProjectNode[]> {
+	async getChildren(element?: ProjectNode): Promise<ProjectNode[]> {
 		if (!this.workspaceRoot) {
 			vscode.window.showInformationMessage('No group in empty workspace');
 			//return Promise.resolve([]);
 		}
 
-		return this.restClient.getProjects(this._groupModel).then(projects => {
-			return projects.map(p => { 
-				const treeItem = new ProjectNode(p, vscode.TreeItemCollapsibleState.None);
-				treeItem.command = { command: 'nodeRecords.showRecords', title: "Show Records", arguments: [p], };
-				return treeItem;
-			});
+		const projects = await this.restClient.getProjects(this._groupModel);
+		return projects.map(p => { 
+			const treeItem = new ProjectNode(p, vscode.TreeItemCollapsibleState.None);
+			treeItem.command = { command: 'nodeRecords.showRecords', title: "Show Records", arguments: [p], };
+			return treeItem;
 		});
-
 	}
 
 	showProjects(groupModel: GroupModel) {
@@ -45,10 +44,20 @@ export class ProjectNodeProvider implements vscode.TreeDataProvider<ProjectNode>
 		this.refresh();
 	}
 
-	buildProject(projectNode: ProjectNode) {
+	async buildProject(projectNode: ProjectNode): Promise<void> {
 		vscode.window.showInformationMessage('Build project ' + projectNode.projectModel.name);
+		const branchModels = await this.restClient.getProjects(projectNode.projectModel);
+		const bm = await this.getTargetBranch(branchModels);
+		if (bm) {
+			vscode.window.showInformationMessage('Selected branche ' + bm.name);
+		}
+	}
 
-		//this.restClient.getBranches()
+	async getTargetBranch(brancheModels: BranchModel[]): Promise<BranchModel> {
+		const branches = brancheModels.map(bm => {return {label: bm.name, description: bm.name, target: bm}}); 
+		const selected = await vscode.window.showQuickPick(branches,
+			{ placeHolder: 'Select the view to show when opening a window.' });
+		return selected ? selected.target : null;
 	}
 }
 

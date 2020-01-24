@@ -4,6 +4,7 @@ import * as path from 'path';
 import { RestClient } from './restClient';
 import { ProjectModel } from './models/projectModel';
 import { RecordModel } from './models/recordModel';
+import { RecordPanel } from './recordPanel';
 
 export class RecordNodeProvider implements vscode.TreeDataProvider<RecordNode> {
 
@@ -23,20 +24,18 @@ export class RecordNodeProvider implements vscode.TreeDataProvider<RecordNode> {
 		return element;
 	}
 
-	getChildren(element?: RecordNode): Thenable<RecordNode[]> {
+	async getChildren(element?: RecordNode): Promise<RecordNode[]> {
 		if (!this.workspaceRoot) {
 			vscode.window.showInformationMessage('No record in empty workspace');
 			//return Promise.resolve([]);
 		}
-
-		return this.restClient.getRecords(this._projectModel).then(records => {
-			return records.map(r => { 
-				const treeItem = new RecordNode(r, vscode.TreeItemCollapsibleState.None);
-				treeItem.command = { command: 'nodeRecords.showEntry', title: "Show Detail", arguments: [r], };
-				return treeItem;
-			});
+		
+		const records = await this.restClient.getRecords(this._projectModel);
+		return records.map(r => { 
+			const treeItem = new RecordNode(r, vscode.TreeItemCollapsibleState.None);
+			treeItem.command = { command: 'nodeRecords.showEntry', title: "Show Detail", arguments: [r], };
+			return treeItem;
 		});
-
 	}
 
 	showRecords(projectModel: ProjectModel) {
@@ -51,6 +50,8 @@ export class RecordNodeProvider implements vscode.TreeDataProvider<RecordNode> {
 
 	showRecord(recordModel: RecordModel) {
 		vscode.window.showInformationMessage('Show record detail');
+		//RecordPanel.createOrShow(recordModel.name);
+		var launch = vscode.commands.executeCommand(`browser-preview.openSharedBrowser`, "https://www.baidu.com/");
 	}
 }
 

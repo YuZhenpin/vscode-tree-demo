@@ -20,20 +20,18 @@ export class GroupNodeProvider implements vscode.TreeDataProvider<GroupNode> {
 		return element;
 	}
 
-	getChildren(element?: GroupNode): Thenable<GroupNode[]> {
+	async getChildren(element?: GroupNode): Promise<GroupNode[]> {
 		if (!this.workspaceRoot) {
 			vscode.window.showInformationMessage('No group in empty workspace');
 			//return Promise.resolve([]);
 		}
-
-		return this.restClient.getGroups().then(groups => {
-			return groups.map(g => { 
-				let treeItem = new GroupNode(g, vscode.TreeItemCollapsibleState.None);
-				treeItem.command = { command: 'nodeProjects.showProjects', title: "Show Projects", arguments: [g], };
-				return treeItem;
-			});
+		
+		const groups = await this.restClient.getGroups();
+		return groups.map(g => { 
+			let treeItem = new GroupNode(g, vscode.TreeItemCollapsibleState.None);
+			treeItem.command = { command: 'nodeProjects.showProjects', title: "Show Projects", arguments: [g], };
+			return treeItem;
 		});
-
 	}
 }
 
